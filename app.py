@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import csv
 
 def fetch_html(url):
     """Fetch the HTML content of the SK Telecom plans page"""
@@ -31,7 +32,7 @@ def parse_html(html):
                 data = tds[2].text.strip()
             except:
                 benefits = "Same as previous plan"
-                data = "Same as previous plan"
+                data = tds[1].text.strip()
 
             # Add the plan to the list
             if (name, price, benefits, data) not in plan_list:
@@ -61,12 +62,34 @@ def print_plans(plan_list):
         print(f"\t\t\tBenefits: {benefits}")
         print(f"\t\t\tData: {data}\n")
 
+def save_to_csv(plan_list):
+    """Save the plans to a CSV file"""
+    csv_file = 'plans.csv'
+    
+    with open(csv_file, 'w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        # Write header
+        writer.writerow(['Name', 'Price', 'Benefits', 'Data'])
+        
+        # Write plan data
+        for plan in plan_list:
+            name, price, benefits, data = plan
+            # Clean up the data before writing
+            price = price.replace('ï¿¦', '￦')
+            benefits = benefits.encode('ascii', 'replace').decode()
+            data = data.encode('ascii', 'replace').decode()
+            data = data.replace('???', "'")
+            writer.writerow([name, price, benefits, data])
+    
+    print(f"\nPlans have been saved to {csv_file}")
+
 def main():
     url = 'https://www.tworld.co.kr/poc/eng/html/EN1.8T.html'
     html = fetch_html(url)
     if html:
         plan_list = parse_html(html)
         print_plans(plan_list)
+        save_to_csv(plan_list)
 
 if __name__ == '__main__':
     main()

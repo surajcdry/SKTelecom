@@ -56,11 +56,13 @@ def print_plans(plan_list):
         benefits = benefits.encode('ascii', 'replace').decode()
         data = data.encode('ascii', 'replace').decode()
         data = data.replace('???', "'")
+        data = data.replace('\n', "")
+        data = data.replace('\t', "")
         
         print(f"{i}. {name}")
-        print(f"\t\t\tPrice: {price}")
-        print(f"\t\t\tBenefits: {benefits}")
-        print(f"\t\t\tData: {data}\n")
+        print(f"\tPrice: {price}")
+        print(f"\tBenefits: {benefits}")
+        print(f"\tData: {data}\n")
 
 def save_to_csv(plan_list):
     """Save the plans to a CSV file"""
@@ -79,6 +81,8 @@ def save_to_csv(plan_list):
             benefits = benefits.encode('ascii', 'replace').decode()
             data = data.encode('ascii', 'replace').decode()
             data = data.replace('???', "'")
+            data = data.replace('\n', "")
+            data = data.replace('\t', "")
             writer.writerow([name, price, benefits, data])
     
     print(f"\nPlans have been saved to {csv_file}")

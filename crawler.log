@@ -1,0 +1,3 @@
+[2025-02-21 23:13:26] FAILED: Error occurred: 'str' object is not callable
+[2025-02-21 23:14:02] FAILED: Error occurred: 'str' object is not callable
+[2025-02-21 23:15:55] SUCCESS: Successfully scraped 6 plans

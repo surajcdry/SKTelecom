@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 import datetime
+import pytz # to convert time from Universal to EST
 
 def fetch_html(url):
     """Fetch the HTML content of the SK Telecom plans page"""
@@ -90,7 +91,8 @@ def save_to_csv(plan_list):
 
 def save_log(success, message):
     """Save execution log with timestamp"""
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    est = pytz.timezone('America/New_York') # timezone change
+    timestamp = datetime.datetime.now(est).strftime("%Y-%m-%d %H:%M:%S %Z")
     with open('crawler.log', 'a', encoding='utf-8') as file:
         log_entry = f"[{timestamp}] {'SUCCESS' if success else 'FAILED'}: {message}\n"
         file.write(log_entry)
